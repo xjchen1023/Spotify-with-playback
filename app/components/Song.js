@@ -1,17 +1,22 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { Themes } from "../../assets/Themes";
 import millisToMinutesAndSeconds from "../../utils/millisToMinutesAndSeconds";
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
-
-const Song = ({item, index}) => {
+const Song = ({item, index, navigation}) => {
     return(
         <View style={styles.container}>
-            <Text style={styles.index}> {index} </Text>
+            <Pressable style={styles.button} 
+                onPress={() => navigation.navigate("PreviewScreen", {previewscreen: item.preview_url})}>
+                <Ionicons name="play-circle" size={22} color={Themes.colors.spotify}/>
+            </Pressable>
             <Image style={styles.image} source = {{uri: item.album.images[0].url}} />
-            <View style={styles.nameBox}>
+            <Pressable style={styles.nameBox} 
+                onPress={() => navigation.navigate("DetailsScreen", {detailsscreen: item.external_urls.spotify})}>
                 <Text numberOfLines={1} style={styles.title}> {item.name} </Text>
                 <Text numberOfLines={1} style={styles.artist}> {item.artists[0].name} </Text>
-            </View>
+            </Pressable>
             <View style={styles.albumBox}>
                 <Text numberOfLines={1} style={styles.album}>{item.album.name}</Text>
             </View>
@@ -29,9 +34,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    index: {
-        color: Themes.colors.gray,
+    button: {
+        width: 20,
+        marginHorizontal: 5,
     },
+    // index: {
+    //     color: Themes.colors.gray,
+    // },
     image: {
         height: 50,
         width: 50,
